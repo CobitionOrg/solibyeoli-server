@@ -2,11 +2,20 @@
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
 </p>
 
-winston log
-swagger api
-validator and transfom
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Boiler plate of NestJS
+<p>this repository is boilerplate of Cobition team</p>
+
+### 미리 세팅 된 내역
+- winston log
+- swagger api
+- class-transformer and class-validator
+
+### 개발 시 주의 사항
+<a href="https://www.notion.so/e629ef0747944c17b2e2619238393947?pvs=4">Notion 참조 (계속 업데이트 예정)</a>
+
+<p>좋은 협업을 위해 prettier와 GitLens를 설치해주세요</p>
+<p>보일러플레이트에서 업데이트 하고 싶은 내역이 있다면 바로 말씀해주시면 됩니다!</p>
+
 
   <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
     <p align="center">
