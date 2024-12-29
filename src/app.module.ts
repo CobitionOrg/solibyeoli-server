@@ -5,27 +5,30 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './filter/httpExceptionFilter';
+import { WordController } from './word/word.controller';
+import { WordService } from './word/word.service';
+import { WordModule } from './word/word.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
+    WordModule,
   ],
   controllers: [AppController],
   providers: [
-    AppService, 
+    AppService,
     Logger,
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
+    WordService,
   ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(LoggerMiddleware).forRoutes('*');
   }
-
 }
