@@ -24,7 +24,6 @@ import { WordModule } from './word/word.module';
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
     },
-    WordService,
   ],
 })
 export class AppModule {
