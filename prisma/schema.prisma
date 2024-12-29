@@ -1,0 +1,117 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator markdown {
+  provider = "prisma-markdown"
+  output   = "./ERD.md"
+  title    = "solibyeoli ERD"
+}
+
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  user_email    String   
+  is_admin   Boolean      @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  is_del      Boolean      @default(false)
+
+  Scores Score[]
+
+  @@map("users")
+}
+
+model Score {
+  id  Int @id @default(autoincrement())
+  score Int
+  user_id Int
+  User User @relation(fields:[user_id], references:[id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  is_del      Boolean      @default(false)
+
+  @@map("score")
+
+}
+
+model Step {
+  id Int @id @default(autoincrement())
+  explain String
+  grade Int
+  seq_id Int
+
+  krWords KrWord[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  is_del      Boolean      @default(false)
+
+  @@map("steps")
+}
+
+
+model KrWord{
+  id Int @id @default(autoincrement())
+  kr_word String
+  pronunciation String
+  pronunciation_url String
+  example String
+  step_id Int
+  Step Step @relation(fields:[step_id],references:[id])
+
+  Synonyms Synonym[]
+  Antonyms Antonym[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  is_del      Boolean      @default(false)
+
+  @@map("kr_words")
+}
+
+model Synonym{
+  id Int @id @default(autoincrement())
+  kr_word String
+  pronunciation String
+  example String
+
+  kr_word_id Int
+  KrWord KrWord @relation(fields:[kr_word_id],references:[id])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  is_del      Boolean      @default(false)
+
+  @@map("synonyms")
+
+}
+
+model Antonym{
+  id Int @id @default(autoincrement())
+  kr_word String
+  pronunciation String
+  example String
+
+  kr_word_id Int
+  KrWord KrWord @relation(fields:[kr_word_id],references:[id])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  is_del      Boolean      @default(false)
+
+  @@map("antonyms")
+
+}
