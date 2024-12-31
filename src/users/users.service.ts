@@ -1,36 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { SignInDto } from './dto/signIn.dto';
 import { UsersRepository } from './users.repository';
 import { BcryptUtilClass } from 'src/utils/bcrypt.util';
+import { JwtService } from '@nestjs/jwt';
+import { SignUpDto } from './dto/signUp.dto';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-    constructor(private usersRepository: UsersRepository) {}
-    private readonly bcryptClass: BcryptUtilClass;
+    constructor(
+        private usersRepository: UsersRepository,
+        private jwtService: JwtService,
+    ) {}
+    private readonly bcryptClass = new BcryptUtilClass();
 
-    create(createUserDto: CreateUserDto) {
-        return 'This action adds a new user';
-    }
-
-    findAll() {
-        return `This action returns all users`;
-    }
-
-    findOne(id: number) {
-        return `This action returns a #${id} user`;
-    }
-
-    update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`;
-    }
-
-    remove(id: number) {
-        return `This action removes a #${id} user`;
-    }
-
-    /////////////////////
     async signIn(signInDto: SignInDto) {
         const userEmail = signInDto.user_email;
         const userPassword = signInDto.user_password;
@@ -49,14 +32,51 @@ export class UsersService {
         }
 
         const payload = {
-            sub: res.data.user_email,
+            sub: res.data.id,
             name: res.data.name,
+            email: res.data.user_email,
+            is_admin: res.data.is_admin,
         };
 
-        // jwt 토큰 발급 후 return
+        const access_token = await this.jwtService.signAsync(payload);
+
+        return {
+            success: true,
+            status: HttpStatus.OK,
+            token: access_token,
+        };
     }
 
-    async test() {
-        return await this.usersRepository.findOne('test');
+    async signUp(signUpDto: SignUpDto) {
+        const existEmailCheck = await this.usersRepository.findOne(
+            signUpDto.user_email,
+        );
+
+        if (existEmailCheck.success === true) {
+            return { success: false, status: HttpStatus.CONFLICT };
+        }
+
+        const user_password = await this.bcryptClass.hashing(
+            signUpDto.user_password,
+        );
+
+        const date = new Date();
+
+        const userData: Prisma.UserCreateInput = {
+            name: signUpDto.name,
+            createdAt: date,
+            updatedAt: date,
+            is_admin: false,
+            is_del: false,
+            user_email: signUpDto.user_email,
+            user_password: user_password,
+        };
+
+        await this.usersRepository.signUp(userData);
+
+        return {
+            success: true,
+            status: HttpStatus.OK,
+        };
     }
 }

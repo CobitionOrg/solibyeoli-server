@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
@@ -25,6 +26,25 @@ export class UsersRepository {
             }
 
             return { success: true, data: userData };
+        } catch (err) {
+            this.logger.error(err);
+            throw new HttpException(
+                {
+                    success: false,
+                    status: HttpStatus.INTERNAL_SERVER_ERROR,
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
+    }
+
+    async signUp(userData: Prisma.UserCreateInput) {
+        try {
+            await this.prisma.user.create({
+                data: userData,
+            });
+
+            return { success: true };
         } catch (err) {
             this.logger.error(err);
             throw new HttpException(
