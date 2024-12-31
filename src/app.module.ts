@@ -8,6 +8,7 @@ import { HttpExceptionFilter } from './filter/httpExceptionFilter';
 import { WordController } from './word/word.controller';
 import { WordService } from './word/word.service';
 import { WordModule } from './word/word.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { WordModule } from './word/word.module';
       isGlobal: true,
     }),
     WordModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [

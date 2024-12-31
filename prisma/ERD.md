@@ -9,11 +9,12 @@ erDiagram
 "users" {
   Int id PK
   String name
-  String user_email
-  Boolean is_admin
   DateTime createdAt
   DateTime updatedAt
+  Boolean is_admin
   Boolean is_del
+  String user_email UK
+  String user_password
 }
 "score" {
   Int id PK
@@ -36,12 +37,12 @@ erDiagram
   Int id PK
   String kr_word
   String pronunciation
-  String pronunciation_url
   String example
   Int step_id FK
   DateTime createdAt
   DateTime updatedAt
   Boolean is_del
+  String pronunciation_url
 }
 "synonyms" {
   Int id PK
@@ -74,11 +75,12 @@ erDiagram
 **Properties**
   - `id`: 
   - `name`: 
-  - `user_email`: 
-  - `is_admin`: 
   - `createdAt`: 
   - `updatedAt`: 
+  - `is_admin`: 
   - `is_del`: 
+  - `user_email`: 
+  - `user_password`: 
 
 ### `score`
 
@@ -107,12 +109,12 @@ erDiagram
   - `id`: 
   - `kr_word`: 
   - `pronunciation`: 
-  - `pronunciation_url`: 
   - `example`: 
   - `step_id`: 
   - `createdAt`: 
   - `updatedAt`: 
   - `is_del`: 
+  - `pronunciation_url`: 
 
 ### `synonyms`
 
