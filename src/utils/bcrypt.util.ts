@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { bcryptConfig } from 'src/configs/bcrypt.config';
+import { CF_BYCRYPT } from 'src/configs/bcrypt.config';
 
 export class BcryptUtilClass {
     /**
@@ -11,7 +11,7 @@ export class BcryptUtilClass {
     async hashing(userPw: string) {
         try {
             //암호화 연산에 사용되는 salt의 cost, 높을수록 암호화 연산이 증가하는 대신 속도가 느려짐
-            const saltRound = bcryptConfig.saltRound;
+            const saltRound = CF_BYCRYPT.saltRound;
             const salt = await bcrypt.genSalt(saltRound);
             const hashedPassword = await bcrypt.hash(userPw, salt); //비밀번호 해쉬화
 
