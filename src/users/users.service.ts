@@ -14,13 +14,20 @@ export class UsersService {
     ) {}
     private readonly bcryptClass = new BcryptUtilClass();
 
+    /**
+     * 사용자 로그인
+     * @param signInDto
+     * @returns
+     * 성공: { success: true, status: 200, token: access_token }
+     * 실패: { success: false, status: 401 }
+     */
     async signIn(signInDto: SignInDto) {
         const userEmail = signInDto.user_email;
         const userPassword = signInDto.user_password;
 
         const res = await this.usersRepository.findOne(userEmail);
         if (res.success === false) {
-            return { success: false, status: 401 };
+            return { success: false, status: HttpStatus.UNAUTHORIZED };
         }
 
         const pwCheck = await this.bcryptClass.checkLogin(
@@ -28,7 +35,7 @@ export class UsersService {
             res.data.user_password,
         );
         if (!pwCheck) {
-            return { success: false, status: 401 };
+            return { success: false, status: HttpStatus.UNAUTHORIZED };
         }
 
         const payload = {
@@ -47,6 +54,13 @@ export class UsersService {
         };
     }
 
+    /**
+     * 사용자 회원가입
+     * @param signUpDto
+     * @returns
+     * 성공: { success: true, status: 200 }
+     * 실패: { success: false, status: 409 }
+     */
     async signUp(signUpDto: SignUpDto) {
         const existEmailCheck = await this.usersRepository.findOne(
             signUpDto.user_email,
@@ -60,12 +74,8 @@ export class UsersService {
             signUpDto.user_password,
         );
 
-        const date = new Date();
-
         const userData: Prisma.UserCreateInput = {
             name: signUpDto.name,
-            createdAt: date,
-            updatedAt: date,
             is_admin: false,
             is_del: false,
             user_email: signUpDto.user_email,

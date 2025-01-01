@@ -9,7 +9,11 @@ export class UsersRepository {
     private readonly logger = new Logger(UsersRepository.name);
 
     /**
-     * email로 사용자 조회
+     * 이메일로 사용자 조회
+     * @param email 조회할 사용자 이메일
+     * @returns
+     * 성공: { success: true, data: userData }
+     * 실패: { success: false }
      */
     async findOne(email: string) {
         try {
@@ -38,6 +42,12 @@ export class UsersRepository {
         }
     }
 
+    /**
+     * 회원가입
+     * @param userData
+     * @returns
+     * 성공: { success: true }
+     */
     async signUp(userData: Prisma.UserCreateInput) {
         try {
             await this.prisma.user.create({

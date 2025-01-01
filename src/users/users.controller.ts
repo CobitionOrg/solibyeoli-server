@@ -1,8 +1,4 @@
-import {
-    Controller,
-    Post,
-    Body,
-} from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { SignInDto } from './dto/signIn.dto';
 import { SignUpDto } from './dto/signUp.dto';
@@ -15,19 +11,23 @@ export class UsersController {
      * 로그인
      * @param signInDto
      * @returns
+     * 성공: { success: true, status: 200, token: access_token }
+     * 실패: { success: false, status: 401 }
      */
     @Post('/signIn')
-    signnIn(@Body() signInDto: SignInDto) {
-        return this.usersService.signIn(signInDto);
+    async signnIn(@Body() signInDto: SignInDto) {
+        return await this.usersService.signIn(signInDto);
     }
 
     /**
      * 회원가입
      * @param signUpDto
      * @returns
+     * 성공: { success: true, status: 200 }
+     * 실패: { success: false, status: 409 }
      */
     @Post('/signUp')
-    signUp(@Body() signUpDto: SignUpDto) {
-        return this.usersService.signUp(signUpDto);
+    async signUp(@Body() signUpDto: SignUpDto) {
+        return await this.usersService.signUp(signUpDto);
     }
 }

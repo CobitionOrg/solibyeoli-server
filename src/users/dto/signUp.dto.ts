@@ -1,7 +1,12 @@
 import { IsString } from 'class-validator';
-import { SignInDto } from './signIn.dto';
 
-export class SignUpDto extends SignInDto {
+export class SignUpDto {
+    @IsString()
+    user_email: string;
+
+    @IsString()
+    user_password: string;
+
     @IsString()
     name: string;
 }
