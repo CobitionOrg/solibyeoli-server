@@ -19,98 +19,103 @@ generator markdown {
   title    = "solibyeoli ERD"
 }
 
-
+///사용자 테이블
 model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  user_email    String   
-  is_admin   Boolean      @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  is_del      Boolean      @default(false)
+  id         Int      @id @default(autoincrement()) ///pk
+  name       String ///이름
+  user_email    String   /// 유저 아이디
+  is_admin   Boolean      @default(false) /// 관리자 여부
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
 
   Scores Score[]
 
   @@map("users")
 }
 
+/// 사용자 점수 테이블
 model Score {
-  id  Int @id @default(autoincrement())
-  score Int
-  user_id Int
+  id  Int @id @default(autoincrement())  /// pk
+  score Int /// 점수
+  user_id Int /// 유저 테이블 fk
   User User @relation(fields:[user_id], references:[id])
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  is_del      Boolean      @default(false)
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("score")
 
 }
 
+
+/// 차시(공부 차시) 테이블
 model Step {
-  id Int @id @default(autoincrement())
-  explain String
-  grade Int
-  seq_id Int
+  id Int @id @default(autoincrement()) /// pk
+  explain String /// 설명
+  grade Int /// 학년
+  seq_id Int /// 차시 순서
 
   krWords KrWord[]
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  is_del      Boolean      @default(false)
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("steps")
 }
 
-
+/// 해당 차시의 단어 테이블
 model KrWord{
-  id Int @id @default(autoincrement())
-  kr_word String
-  pronunciation String
-  pronunciation_url String
-  example String
-  step_id Int
+  id Int @id @default(autoincrement()) /// pk
+  kr_word String /// 단어
+  pronunciation String /// 발음
+  pronunciation_url String /// 발음 파일 url
+  example String /// 예시
+  step_id Int /// 차시 테이블 fk
   Step Step @relation(fields:[step_id],references:[id])
 
   Synonyms Synonym[]
   Antonyms Antonym[]
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  is_del      Boolean      @default(false)
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("kr_words")
 }
 
+/// 유의어
 model Synonym{
-  id Int @id @default(autoincrement())
-  kr_word String
-  pronunciation String
-  example String
+  id Int @id @default(autoincrement()) /// pk
+  kr_word String /// 유의어 단어
+  pronunciation String /// 발음
+  example String /// 예시
 
-  kr_word_id Int
+  kr_word_id Int /// 원래 단어 fk
   KrWord KrWord @relation(fields:[kr_word_id],references:[id])
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  is_del      Boolean      @default(false)
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("synonyms")
 
 }
 
+/// 반의어
 model Antonym{
-  id Int @id @default(autoincrement())
-  kr_word String
-  pronunciation String
-  example String
+  id Int @id @default(autoincrement()) /// pk
+  kr_word String /// 반의어 단어
+  pronunciation String /// 발음
+  example String /// 예시
 
-  kr_word_id Int
+  kr_word_id Int /// 원래 단어 fk
   KrWord KrWord @relation(fields:[kr_word_id],references:[id])
 
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now()) @updatedAt
-  is_del      Boolean      @default(false)
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("antonyms")
 

@@ -70,70 +70,76 @@ erDiagram
 ```
 
 ### `users`
+사용자 테이블
 
 **Properties**
-  - `id`: 
-  - `name`: 
-  - `user_email`: 
-  - `is_admin`: 
-  - `createdAt`: 
-  - `updatedAt`: 
-  - `is_del`: 
+  - `id`: pk
+  - `name`: 이름
+  - `user_email`: 유저 아이디
+  - `is_admin`: 관리자 여부
+  - `createdAt`: 생성일
+  - `updatedAt`: 수정일
+  - `is_del`: 삭제 여부
 
 ### `score`
+사용자 점수 테이블
 
 **Properties**
-  - `id`: 
-  - `score`: 
-  - `user_id`: 
-  - `createdAt`: 
-  - `updatedAt`: 
-  - `is_del`: 
+  - `id`: pk
+  - `score`: 점수
+  - `user_id`: 유저 테이블 fk
+  - `createdAt`: 생성일
+  - `updatedAt`: 수정일
+  - `is_del`: 삭제 여부
 
 ### `steps`
+차시(공부 차시) 테이블
 
 **Properties**
-  - `id`: 
-  - `explain`: 
-  - `grade`: 
-  - `seq_id`: 
-  - `createdAt`: 
-  - `updatedAt`: 
-  - `is_del`: 
+  - `id`: pk
+  - `explain`: 설명
+  - `grade`: 학년
+  - `seq_id`: 차시 순서
+  - `createdAt`: 생성일
+  - `updatedAt`: 수정일
+  - `is_del`: 삭제 여부
 
 ### `kr_words`
+해당 차시의 단어 테이블
 
 **Properties**
-  - `id`: 
-  - `kr_word`: 
-  - `pronunciation`: 
-  - `pronunciation_url`: 
-  - `example`: 
-  - `step_id`: 
-  - `createdAt`: 
-  - `updatedAt`: 
-  - `is_del`: 
+  - `id`: pk
+  - `kr_word`: 단어
+  - `pronunciation`: 발음
+  - `pronunciation_url`: 발음 파일 url
+  - `example`: 예시
+  - `step_id`: 차시 테이블 fk
+  - `createdAt`: 생성일
+  - `updatedAt`: 수정일
+  - `is_del`: 삭제 여부
 
 ### `synonyms`
+유의어
 
 **Properties**
-  - `id`: 
-  - `kr_word`: 
-  - `pronunciation`: 
-  - `example`: 
-  - `kr_word_id`: 
-  - `createdAt`: 
-  - `updatedAt`: 
-  - `is_del`: 
+  - `id`: pk
+  - `kr_word`: 유의어 단어
+  - `pronunciation`: 발음
+  - `example`: 예시
+  - `kr_word_id`: 원래 단어 fk
+  - `createdAt`: 생성일
+  - `updatedAt`: 수정일
+  - `is_del`: 삭제 여부
 
 ### `antonyms`
+반의어
 
 **Properties**
-  - `id`: 
-  - `kr_word`: 
-  - `pronunciation`: 
-  - `example`: 
-  - `kr_word_id`: 
-  - `createdAt`: 
-  - `updatedAt`: 
-  - `is_del`: 
+  - `id`: pk
+  - `kr_word`: 반의어 단어
+  - `pronunciation`: 발음
+  - `example`: 예시
+  - `kr_word_id`: 원래 단어 fk
+  - `createdAt`: 생성일
+  - `updatedAt`: 수정일
+  - `is_del`: 삭제 여부
