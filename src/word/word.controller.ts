@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { WordService } from './word.service';
 import { CreateWordDto } from './dto/createWord.dto';
@@ -14,6 +14,15 @@ export class WordController {
   @Post('/createBulk')
   async createBulk(@Body() createWordDtos: Array<CreateWordDto>) {
     const res = await this.wordSevice.createWords(createWordDtos);
+
+    return res;
+  }
+
+  @ApiOperation({ summary: '학년 별 차수 조회' })
+  @Get('/getSteps/:gradeNum')
+  async getStepsByGrade(@Param('gradeNum') gradeNum: number) {
+    this.logger.log('학년 별 차수 조회');
+    const res = await this.wordSevice.getStepsByGrade(gradeNum);
 
     return res;
   }
