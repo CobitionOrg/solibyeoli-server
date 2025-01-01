@@ -48,7 +48,7 @@ export class WordController {
 
     if (cacheValue) return cacheValue;
 
-    const res = await this.wordSevice.getWordsByStpe(stepId);
+    const res = await this.wordSevice.getWordsByStep(stepId);
     //캐시 세팅
     this.cache.set(cacheKey, res, 60 * 60);
 
