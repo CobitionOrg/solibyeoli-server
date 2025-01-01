@@ -37,7 +37,7 @@ export class WordRepository {
     try {
       const steps = await this.prisma.step.findMany({
         where: { grade: gradeNum },
-        orderBy: { explain: 'desc' },
+        orderBy: { seq_id: 'asc' },
       });
 
       return { success: true, status: HttpStatus.OK, data: steps };
