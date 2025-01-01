@@ -26,4 +26,13 @@ export class WordController {
 
     return res;
   }
+
+  @ApiOperation({ summary: '차수로 단어 조회' })
+  @Get('/getWords/:stepId')
+  async getWordsByStep(@Param('stepId') stepId: number) {
+    this.logger.log('차수 별 단어 조회');
+    const res = await this.wordSevice.getWordsByStpe(stepId);
+
+    return res;
+  }
 }

@@ -32,4 +32,15 @@ export class WordService {
 
     return res;
   }
+
+  /**
+   * 차수로 단어 조회
+   * @param stepId
+   * @returns
+   */
+  async getWordsByStpe(stepId: number) {
+    const res = await this.wordRepository.getWordsBySteps(stepId);
+
+    return res;
+  }
 }
