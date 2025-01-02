@@ -39,7 +39,7 @@ export class WordService {
    * @returns
    */
   async getWordsByStep(stepId: number) {
-    const res = await this.wordRepository.getWordsBySteps(stepId);
+    const res = await this.wordRepository.getWordsByStep(stepId);
 
     return res;
   }

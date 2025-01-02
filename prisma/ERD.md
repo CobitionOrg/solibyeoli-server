@@ -9,12 +9,12 @@ erDiagram
 "users" {
   Int id PK
   String name
-  DateTime createdAt
-  DateTime updatedAt
-  Boolean is_admin
-  Boolean is_del
   String user_email UK
   String user_password
+  Boolean is_admin
+  DateTime createdAt
+  DateTime updatedAt
+  Boolean is_del
 }
 "score" {
   Int id PK
@@ -37,12 +37,12 @@ erDiagram
   Int id PK
   String kr_word
   String pronunciation
+  String pronunciation_url
   String example
   Int step_id FK
   DateTime createdAt
   DateTime updatedAt
   Boolean is_del
-  String pronunciation_url
 }
 "synonyms" {
   Int id PK
