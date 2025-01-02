@@ -43,7 +43,7 @@ export class WordController {
   async getWordsByStep(@Param('stepId') stepId: number) {
     this.logger.log('차수 별 단어 조회');
 
-    const cacheKey = `/getSteps/${stepId}`;
+    const cacheKey = `/getWords/${stepId}`;
     const cacheValue = this.cache.get(cacheKey);
 
     if (cacheValue) return cacheValue;

@@ -59,7 +59,7 @@ export class WordRepository {
    * @param stepId : step 테이블 id
    * @returns
    */
-  async getWordsBySteps(stepId: number) {
+  async getWordsByStep(stepId: number) {
     try {
       const words = await this.prisma.krWord.findMany({
         where: { step_id: stepId },
