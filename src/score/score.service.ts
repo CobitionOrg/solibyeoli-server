@@ -14,6 +14,12 @@ export class ScoreService {
 
     private readonly logger = new Logger(ScoreService.name);
 
+    /**
+     * 퀴즈 결과 내역 조회
+     * @param createResultDto
+     * @param header
+     * @returns
+     */
     async createQuizResult(createResultDto: CreateResultDto, header: string) {
         const token = await this.jwtService.decode(header);
 

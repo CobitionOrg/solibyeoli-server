@@ -7,7 +7,7 @@ import {
     UseFilters,
     UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ScoreService } from './score.service';
 import { CreateResultDto } from './dto/createResult.dto';
 import { getToken } from 'src/utils/token';
@@ -23,6 +23,7 @@ export class ScoreController {
 
     private readonly logger = new Logger(ScoreController.name);
 
+    @ApiOperation({ summary: '퀴즈 결과 조회' })
     @Post('/')
     async createScore(
         @Body() createResultDto: CreateResultDto,
