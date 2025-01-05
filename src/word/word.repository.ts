@@ -27,4 +27,55 @@ export class WordRepository {
       );
     }
   }
+
+  /**
+   * 학년으로 차수 조회
+   * @param gradeNum : 학년 숫자
+   * @returns
+   */
+  async getStepsByGrade(gradeNum: number) {
+    try {
+      const steps = await this.prisma.step.findMany({
+        where: { grade: gradeNum },
+        orderBy: { seq_id: 'asc' },
+      });
+
+      return { success: true, status: HttpStatus.OK, data: steps };
+    } catch (err) {
+      this.logger.error(err);
+      throw new HttpException(
+        {
+          success: false,
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          msg: '내부 서버 에러',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  /**
+   * 차수로 단어 조회
+   * @param stepId : step 테이블 id
+   * @returns
+   */
+  async getWordsByStep(stepId: number) {
+    try {
+      const words = await this.prisma.krWord.findMany({
+        where: { step_id: stepId },
+      });
+
+      return { success: true, status: HttpStatus.OK, data: words };
+    } catch (err) {
+      this.logger.error(err);
+      throw new HttpException(
+        {
+          success: false,
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          msg: '내부 서버 에러',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

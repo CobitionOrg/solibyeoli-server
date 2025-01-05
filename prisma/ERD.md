@@ -9,7 +9,8 @@ erDiagram
 "users" {
   Int id PK
   String name
-  String user_email
+  String user_email UK
+  String user_password
   Boolean is_admin
   DateTime createdAt
   DateTime updatedAt
@@ -76,6 +77,7 @@ erDiagram
   - `id`: pk
   - `name`: 이름
   - `user_email`: 유저 아이디
+  - `user_password`: 유저 비밀번호
   - `is_admin`: 관리자 여부
   - `createdAt`: 생성일
   - `updatedAt`: 수정일

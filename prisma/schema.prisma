@@ -1,16 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-}
-
-datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
 }
 
 generator markdown {
@@ -19,11 +8,17 @@ generator markdown {
   title    = "solibyeoli ERD"
 }
 
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
 ///사용자 테이블
 model User {
   id         Int      @id @default(autoincrement()) ///pk
   name       String ///이름
-  user_email    String   /// 유저 아이디
+  user_email    String   @unique(map: "unique_constraint_name") /// 유저 아이디
+  user_password  String  /// 유저 비밀번호
   is_admin   Boolean      @default(false) /// 관리자 여부
   createdAt  DateTime @default(now()) /// 생성일
   updatedAt  DateTime @default(now()) @updatedAt /// 수정일
@@ -45,7 +40,6 @@ model Score {
   is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("score")
-
 }
 
 
@@ -82,6 +76,7 @@ model KrWord{
   updatedAt  DateTime @default(now()) @updatedAt /// 수정일
   is_del      Boolean      @default(false) /// 삭제 여부
 
+  @@index([step_id], map: "kr_words_step_id_fkey")
   @@map("kr_words")
 }
 
@@ -100,7 +95,6 @@ model Synonym{
   is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("synonyms")
-
 }
 
 /// 반의어
@@ -118,5 +112,4 @@ model Antonym{
   is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("antonyms")
-
 }
