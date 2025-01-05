@@ -9,6 +9,7 @@ import { WordController } from './word/word.controller';
 import { WordService } from './word/word.service';
 import { WordModule } from './word/word.module';
 import { UsersModule } from './users/users.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersModule } from './users/users.module';
     }),
     WordModule,
     UsersModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
