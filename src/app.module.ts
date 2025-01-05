@@ -9,28 +9,34 @@ import { WordController } from './word/word.controller';
 import { WordService } from './word/word.service';
 import { WordModule } from './word/word.module';
 import { UsersModule } from './users/users.module';
+
 import { ScoreController } from './score/score.controller';
 import { ScoreService } from './score/score.service';
 import { ScoreModule } from './score/score.module';
 
+
+import { AdminModule } from './admin/admin.module';
+
 @Module({
-    imports: [
-        ConfigModule.forRoot({
-            isGlobal: true,
-        }),
-        WordModule,
-        UsersModule,
-        ScoreModule,
-    ],
-    controllers: [AppController],
-    providers: [
-        AppService,
-        Logger,
-        {
-            provide: APP_FILTER,
-            useClass: HttpExceptionFilter,
-        },
-    ],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    WordModule,
+    UsersModule,
+    AdminModule,
+    ScoreModule,
+  ],
+  controllers: [AppController],
+  providers: [
+    AppService,
+    Logger,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
+
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {
