@@ -41,7 +41,7 @@ export class ScoreService {
         const createData = await this.prisma.$transaction(async (tx) => {
             const score = await this.scoreRepository.createScore(
                 tx,
-                1,
+                userId,
                 createScore.step_id,
                 createScore.score,
             );
