@@ -48,8 +48,8 @@ export class WordService {
      * @returns
      */
     async getWordsByStep(stepId: number) {
-        const res = await this.wordRepository.getWordsByStep(stepId);
+        const words = await this.wordRepository.getWordsByStep(stepId);
 
-        return res;
-    }
+        return { success: true, status: HttpStatus.OK, data: words };
+      }
 }

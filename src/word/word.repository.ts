@@ -65,7 +65,7 @@ export class WordRepository {
                 where: { step_id: stepId },
             });
 
-            return { success: true, status: HttpStatus.OK, data: words };
+            return words;
         } catch (err) {
             this.logger.error(err);
             throw new HttpException(
