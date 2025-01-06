@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
     Logger,
     Param,
@@ -39,7 +40,7 @@ export class AdminController {
 
     // 단어 삭제(soft delete)
     @ApiOperation({ summary: '단어 삭제' })
-    @Patch('/word')
+    @Delete('/word')
     async deleteWord(@Body() deleteWordDto: DeleteWordDto) {
         const res = await this.adminService.deleteWord(deleteWordDto.id);
 

@@ -31,7 +31,7 @@ export class AdminService {
     async getIdFromStepsTable(grade: number, seq: number) {
         const res = await this.adminRepository.getIdFromStepsTable(grade, seq);
         // console.log(res);
-        if (res == null) {
+        if (!res) {
             throw new HttpException(
                 {
                     success: false,
@@ -39,9 +39,8 @@ export class AdminService {
                 },
                 HttpStatus.BAD_REQUEST,
             );
-        } else {
-            return res.id;
         }
+        return res.id;
     }
 
     /**
