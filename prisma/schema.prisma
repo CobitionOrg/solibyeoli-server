@@ -35,6 +35,11 @@ model Score {
   score Int /// 점수
   user_id Int /// 유저 테이블 fk
   User User @relation(fields:[user_id], references:[id])
+  step_id Int /// 차수 테이블 fk
+  Step Step @relation(fields:[step_id],references:[id])
+
+  ScoreResults ScoreResult[]
+  
   createdAt  DateTime @default(now()) /// 생성일
   updatedAt  DateTime @default(now()) @updatedAt /// 수정일
   is_del      Boolean      @default(false) /// 삭제 여부
@@ -42,6 +47,20 @@ model Score {
   @@map("score")
 }
 
+model ScoreResult {
+  id  Int @id @default(autoincrement())  /// pk
+  score_id Int /// 점수 테이블 fk
+  Score Score @relation(fields:[score_id], references:[id])
+
+  question_id Int /// 몇 번 단어의 문제인지
+  is_collect Boolean @default(false) /// 정답 여부
+
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
+
+  @@map("score_result")
+}
 
 /// 차시(공부 차시) 테이블
 model Step {
@@ -51,6 +70,7 @@ model Step {
   seq_id Int /// 차시 순서
 
   krWords KrWord[]
+  Scores Score[]
 
   createdAt  DateTime @default(now()) /// 생성일
   updatedAt  DateTime @default(now()) @updatedAt /// 수정일

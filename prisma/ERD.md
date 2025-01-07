@@ -20,6 +20,16 @@ erDiagram
   Int id PK
   Int score
   Int user_id FK
+  Int step_id FK
+  DateTime createdAt
+  DateTime updatedAt
+  Boolean is_del
+}
+"score_result" {
+  Int id PK
+  Int score_id FK
+  Int question_id
+  Boolean is_collect
   DateTime createdAt
   DateTime updatedAt
   Boolean is_del
@@ -65,6 +75,8 @@ erDiagram
   Boolean is_del
 }
 "score" }o--|| "users" : User
+"score" }o--|| "steps" : Step
+"score_result" }o--|| "score" : Score
 "kr_words" }o--|| "steps" : Step
 "synonyms" }o--|| "kr_words" : KrWord
 "antonyms" }o--|| "kr_words" : KrWord
@@ -90,6 +102,18 @@ erDiagram
   - `id`: pk
   - `score`: 점수
   - `user_id`: 유저 테이블 fk
+  - `step_id`: 차수 테이블 fk
+  - `createdAt`: 생성일
+  - `updatedAt`: 수정일
+  - `is_del`: 삭제 여부
+
+### `score_result`
+
+**Properties**
+  - `id`: pk
+  - `score_id`: 점수 테이블 fk
+  - `question_id`: 몇 번 단어의 문제인지
+  - `is_collect`: 정답 여부
   - `createdAt`: 생성일
   - `updatedAt`: 수정일
   - `is_del`: 삭제 여부
