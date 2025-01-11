@@ -17,7 +17,7 @@ RUN npx prisma generate
 COPY . .
 
 # 애플리케이션 빌드
-RUN npm run build
+RUN sudo npm run build
 
 # Stage 2: Production Stage
 FROM node:18-alpine
