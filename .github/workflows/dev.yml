@@ -1,13 +1,12 @@
-name: Docker Image CI
-
 on:
     push:
         branches: ['main']
 
 jobs:
-    build:
+    # CI Pipeline
+    ci:
+        name: Docker Image CI
         runs-on: ubuntu-latest
-
         steps:
             - uses: actions/checkout@v3
 
@@ -23,4 +22,17 @@ jobs:
             - name: Push to Dockerhub
               run: docker push qudqud97/solibyeli:latest
 
+    # CD Pipeline
+    cd:
+        name: CD Pipeline
+        needs: ci
+        runs-on: self-hosted
+        steps:
+            - name: Pull Docker image
+              run: sudo docker pull qudqud97/solibyeli:latest
 
+            - name: Delete Old docker container
+              run: sudo docker rm -f solibyeli-container || true
+
+            - name: Run Docker Container
+              run: sudo docker run -d -p 3000:3000 --name solibyeli-container qudqud97/solibyeli
