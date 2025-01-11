@@ -29,10 +29,10 @@ jobs:
         runs-on: self-hosted
         steps:
             - name: Pull Docker image
-              run: sudo docker pull qudqud97/solibyeli:latest
+              run: docker pull qudqud97/solibyeli:latest
 
             - name: Delete Old docker container
-              run: sudo docker rm -f solibyeli-container || true
+              run: docker rm -f solibyeli-container || true
 
             - name: Run Docker Container
-              run: sudo docker run -d -p 3000:3000 --name solibyeli-container \-v /host/logs:/app/dist/logs qudqud97/solibyeli
+              run: docker run -d -p 3000:3000 --name solibyeli-container \-v /host/logs:/app/dist/logs qudqud97/solibyeli
