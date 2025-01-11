@@ -17,7 +17,7 @@ RUN npx prisma generate
 COPY . .
 
 # 애플리케이션 빌드
-RUN sudo npm run build
+RUN npm run build
 
 # Stage 2: Production Stage
 FROM node:18-alpine
@@ -28,8 +28,11 @@ WORKDIR /app
 # 빌드 결과물만 복사
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json .
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/prisma ./prisma
+
+# 로그 디렉토리 생성 및 권한 설정
+RUN mkdir -p /app/dist/logs && chown -R appuser:appgroup /app/dist/logs
 
 # 실행 사용자 추가
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
