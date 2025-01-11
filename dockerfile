@@ -31,8 +31,6 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/prisma ./prisma
 
-# 로그 디렉토리 생성 및 권한 설정
-RUN mkdir -p /app/dist/logs && chown -R appuser:appgroup /app/dist/logs
 
 # 실행 사용자 추가
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
