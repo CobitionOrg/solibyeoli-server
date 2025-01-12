@@ -23,7 +23,7 @@ export class ScoreController {
 
     private readonly logger = new Logger(ScoreController.name);
 
-    @ApiOperation({ summary: '퀴즈 결과 조회' })
+    @ApiOperation({ summary: '퀴즈 결과 생성' })
     @Post('/')
     async createScore(
         @Body() createResultDto: CreateResultDto,
