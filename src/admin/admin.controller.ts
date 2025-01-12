@@ -7,6 +7,7 @@ import {
     Param,
     Patch,
     Post,
+    Query,
     UseGuards,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
@@ -49,7 +50,7 @@ export class AdminController {
         return res;
     }
 
-    // 단어 데이터 수정
+    // 단어 수정
     @ApiOperation({ summary: '단어 수정' })
     @Patch('/word')
     async updateWordData(@Body() updateWordDto: UpdateWordDto) {
@@ -63,6 +64,15 @@ export class AdminController {
     @Post('/word')
     async createWordData(@Body() createWordDto: CreateWordDto) {
         const res = await this.adminService.createWordData(createWordDto);
+
+        return res;
+    }
+
+    // presigned url 발급
+    @ApiOperation({ summary: 's3 url 발급' })
+    @Get('/s3-url')
+    async getPresignedUrl(@Query('fileName') fileName: string) {
+        const res = await this.adminService.getPresignedUrl(fileName);
 
         return res;
     }

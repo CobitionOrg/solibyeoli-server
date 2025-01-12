@@ -1,4 +1,4 @@
-import { IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreateWordDto {
     @IsString()
@@ -17,4 +17,8 @@ export class CreateWordDto {
 
     @IsNumber()
     seq_id: number;
+
+    @IsOptional()
+    @IsString()
+    pronunciation_url?: string;
 }

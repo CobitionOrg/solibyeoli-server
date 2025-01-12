@@ -1,4 +1,4 @@
-import { IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class UpdateWordDto {
     @IsNumber()
@@ -20,4 +20,8 @@ export class UpdateWordDto {
 
     @IsNumber()
     seq_id: number;
+
+    @IsOptional()
+    @IsString()
+    pronunciation_url?: string;
 }

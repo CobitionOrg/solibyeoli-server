@@ -97,6 +97,12 @@ export class AdminRepository {
         }
     }
 
+    /**
+     * 단어 관련 데이터 생성
+     * @param createWordDto
+     * @param step_id
+     * @returns
+     */
     async createWordData(createWordDto: CreateWordDto, step_id: number) {
         try {
             const res = await this.prisma.krWord.create({
@@ -105,10 +111,11 @@ export class AdminRepository {
                     pronunciation: createWordDto.pronunciation,
                     example: createWordDto.example,
                     step_id: step_id,
-                    // url 추가해야 됨
-                    pronunciation_url: '',
+                    pronunciation_url: createWordDto.pronunciation_url || '',
                 },
             });
+
+            return res;
         } catch (err) {
             this.logger.error(err);
             throw new HttpException(
@@ -122,6 +129,12 @@ export class AdminRepository {
         }
     }
 
+    /**
+     * 단어 관련 데이터 수정정
+     * @param updateWordDto
+     * @param step_id
+     * @returns
+     */
     async updateWordData(updateWordDto: UpdateWordDto, step_id: number) {
         try {
             const res = await this.prisma.krWord.update({
@@ -130,13 +143,14 @@ export class AdminRepository {
                     pronunciation: updateWordDto.pronunciation,
                     example: updateWordDto.example,
                     step_id: step_id,
-                    // url 추가해야 됨
-                    pronunciation_url: '',
+                    pronunciation_url: updateWordDto.pronunciation_url || '',
                 },
                 where: {
                     id: updateWordDto.id,
                 },
             });
+
+            return res;
         } catch (err) {
             this.logger.error(err);
             throw new HttpException(

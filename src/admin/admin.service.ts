@@ -2,10 +2,14 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { AdminRepository } from './admin.repository';
 import { CreateWordDto } from './dto/createWord.dto';
 import { UpdateWordDto } from './dto/updateWord.dto';
+import { S3Service } from 'src/s3/s3.service';
 
 @Injectable()
 export class AdminService {
-    constructor(private readonly adminRepository: AdminRepository) {}
+    constructor(
+        private readonly adminRepository: AdminRepository,
+        private readonly s3Service: S3Service,
+    ) {}
 
     private readonly logger = new Logger(AdminService.name);
 
@@ -58,6 +62,11 @@ export class AdminService {
         return { success: true, status: HttpStatus.NO_CONTENT };
     }
 
+    /**
+     * 단어 관련 데이터 생성
+     * @param createWordDto
+     * @returns
+     */
     async createWordData(createWordDto: CreateWordDto) {
         const step_id = await this.getIdFromStepsTable(
             createWordDto.grade,
@@ -69,9 +78,14 @@ export class AdminService {
             step_id,
         );
 
-        return { success: true, status: HttpStatus.OK };
+        return { success: true, status: HttpStatus.OK, data: res };
     }
 
+    /**
+     * 단어 관련 데이터 수정
+     * @param updateWordDto
+     * @returns
+     */
     async updateWordData(updateWordDto: UpdateWordDto) {
         const step_id = await this.getIdFromStepsTable(
             updateWordDto.grade,
@@ -83,6 +97,20 @@ export class AdminService {
             step_id,
         );
 
-        return { success: true, status: HttpStatus.OK };
+        return { success: true, status: HttpStatus.OK, data: res };
+    }
+
+    /**
+     * 파일 업로드를 위한 presigned url 발급
+     * @param fileName
+     * @returns
+     */
+    async getPresignedUrl(fileName: string) {
+        if (!fileName) {
+            throw new Error('File name is required');
+        }
+        const url = await this.s3Service.getPresignedUrl(fileName);
+
+        return { success: true, url: url, status: HttpStatus.OK };
     }
 }
