@@ -35,15 +35,18 @@ export class ScoreService {
 
         const userId = token.sub;
 
-        const createScore = createResultDto.score;
+        const createScore =
+            createResultDto.scoreResults.filter((i) => i.is_collect === true)
+                .length / createResultDto.scoreResults.length;
+
         const createScoreResult = createResultDto.scoreResults;
 
         const createData = await this.prisma.$transaction(async (tx) => {
             const score = await this.scoreRepository.createScore(
                 tx,
                 userId,
-                createScore.step_id,
-                createScore.score,
+                createResultDto.step_id,
+                createScore,
             );
 
             const scoreResult =
