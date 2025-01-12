@@ -15,6 +15,8 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { ApiOperation } from '@nestjs/swagger';
 import { GetWordsByGradeAndStep } from './dto/getWordsByGradeAndStep.dto';
 import { DeleteWordDto } from './dto/deleteWord.dto';
+import { UpdateWordDto } from './dto/updateWord.dto';
+import { CreateWordDto } from './dto/createWord.dto';
 
 @Controller('admin')
 @UseGuards(AuthGuard)
@@ -48,12 +50,20 @@ export class AdminController {
     }
 
     // 단어 데이터 수정
-    @ApiOperation({ summary: '단어 데이터 수정' })
-    @Patch('/word-data')
-    async updateWordData() {}
+    @ApiOperation({ summary: '단어 수정' })
+    @Patch('/word')
+    async updateWordData(@Body() updateWordDto: UpdateWordDto) {
+        const res = await this.adminService.updateWordData(updateWordDto);
+
+        return res;
+    }
 
     // 단어 추가
-    @ApiOperation({ summary: '단어 데이터 추가' })
-    @Post('/word-data')
-    async createWordData() {}
+    @ApiOperation({ summary: '단어 추가' })
+    @Post('/word')
+    async createWordData(@Body() createWordDto: CreateWordDto) {
+        const res = await this.adminService.createWordData(createWordDto);
+
+        return res;
+    }
 }

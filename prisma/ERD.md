@@ -9,12 +9,12 @@ erDiagram
 "users" {
   Int id PK
   String name
-  String user_email UK
-  String user_password
-  Boolean is_admin
   DateTime createdAt
   DateTime updatedAt
+  Boolean is_admin
   Boolean is_del
+  String user_email UK
+  String user_password
 }
 "score" {
   Int id PK
@@ -23,6 +23,7 @@ erDiagram
   DateTime createdAt
   DateTime updatedAt
   Boolean is_del
+  Int step_id FK
 }
 "steps" {
   Int id PK
@@ -37,12 +38,12 @@ erDiagram
   Int id PK
   String kr_word
   String pronunciation
-  String pronunciation_url
   String example
   Int step_id FK
   DateTime createdAt
   DateTime updatedAt
   Boolean is_del
+  String pronunciation_url
 }
 "synonyms" {
   Int id PK
@@ -64,10 +65,21 @@ erDiagram
   DateTime updatedAt
   Boolean is_del
 }
+"score_result" {
+  Int id PK
+  Int score_id FK
+  Int question_id
+  Boolean is_collect
+  DateTime createdAt
+  DateTime updatedAt
+  Boolean is_del
+}
+"score" }o--|| "steps" : steps
 "score" }o--|| "users" : User
 "kr_words" }o--|| "steps" : Step
 "synonyms" }o--|| "kr_words" : KrWord
 "antonyms" }o--|| "kr_words" : KrWord
+"score_result" }o--|| "score" : score
 ```
 
 ### `users`
@@ -76,12 +88,12 @@ erDiagram
 **Properties**
   - `id`: pk
   - `name`: 이름
-  - `user_email`: 유저 아이디
-  - `user_password`: 유저 비밀번호
-  - `is_admin`: 관리자 여부
   - `createdAt`: 생성일
   - `updatedAt`: 수정일
+  - `is_admin`: 관리자 여부
   - `is_del`: 삭제 여부
+  - `user_email`: 유저 아이디
+  - `user_password`: 유저 비밀번호
 
 ### `score`
 사용자 점수 테이블
@@ -93,6 +105,7 @@ erDiagram
   - `createdAt`: 생성일
   - `updatedAt`: 수정일
   - `is_del`: 삭제 여부
+  - `step_id`: 
 
 ### `steps`
 차시(공부 차시) 테이블
@@ -113,12 +126,12 @@ erDiagram
   - `id`: pk
   - `kr_word`: 단어
   - `pronunciation`: 발음
-  - `pronunciation_url`: 발음 파일 url
   - `example`: 예시
   - `step_id`: 차시 테이블 fk
   - `createdAt`: 생성일
   - `updatedAt`: 수정일
   - `is_del`: 삭제 여부
+  - `pronunciation_url`: 발음 파일 url
 
 ### `synonyms`
 유의어
@@ -145,3 +158,14 @@ erDiagram
   - `createdAt`: 생성일
   - `updatedAt`: 수정일
   - `is_del`: 삭제 여부
+
+### `score_result`
+
+**Properties**
+  - `id`: 
+  - `score_id`: 
+  - `question_id`: 
+  - `is_collect`: 
+  - `createdAt`: 
+  - `updatedAt`: 
+  - `is_del`: 

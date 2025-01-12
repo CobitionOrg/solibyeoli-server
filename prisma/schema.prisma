@@ -13,103 +13,160 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-///사용자 테이블
+/// 사용자 테이블
 model User {
-  id         Int      @id @default(autoincrement()) ///pk
-  name       String ///이름
-  user_email    String   @unique(map: "unique_constraint_name") /// 유저 아이디
-  user_password  String  /// 유저 비밀번호
-  is_admin   Boolean      @default(false) /// 관리자 여부
-  createdAt  DateTime @default(now()) /// 생성일
-  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
-  is_del      Boolean      @default(false) /// 삭제 여부
-
-  Scores Score[]
+  /// pk
+  id            Int      @id @default(autoincrement())
+  /// 이름
+  name          String
+  /// 생성일
+  createdAt     DateTime @default(now())
+  /// 수정일
+  updatedAt     DateTime @default(now()) @updatedAt
+  /// 관리자 여부
+  is_admin      Boolean  @default(false)
+  /// 삭제 여부
+  is_del        Boolean  @default(false)
+  /// 유저 아이디
+  user_email    String   @unique(map: "unique_constraint_name")
+  /// 유저 비밀번호
+  user_password String
+  Scores        Score[]
 
   @@map("users")
 }
 
 /// 사용자 점수 테이블
 model Score {
-  id  Int @id @default(autoincrement())  /// pk
-  score Int /// 점수
-  user_id Int /// 유저 테이블 fk
-  User User @relation(fields:[user_id], references:[id])
-  createdAt  DateTime @default(now()) /// 생성일
-  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
-  is_del      Boolean      @default(false) /// 삭제 여부
+  /// pk
+  id           Int            @id @default(autoincrement())
+  /// 점수
+  score        Int
+  /// 유저 테이블 fk
+  user_id      Int
+  /// 생성일
+  createdAt    DateTime       @default(now())
+  /// 수정일
+  updatedAt    DateTime       @default(now()) @updatedAt
+  /// 삭제 여부
+  is_del       Boolean        @default(false)
+  step_id      Int
+  steps        Step           @relation(fields: [step_id], references: [id])
+  User         User           @relation(fields: [user_id], references: [id])
+  score_result score_result[]
 
+  @@index([step_id], map: "score_step_id_fkey")
+  @@index([user_id], map: "score_user_id_fkey")
   @@map("score")
 }
 
-
 /// 차시(공부 차시) 테이블
 model Step {
-  id Int @id @default(autoincrement()) /// pk
-  explain String /// 설명
-  grade Int /// 학년
-  seq_id Int /// 차시 순서
-
-  krWords KrWord[]
-
-  createdAt  DateTime @default(now()) /// 생성일
-  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
-  is_del      Boolean      @default(false) /// 삭제 여부
+  /// pk
+  id        Int      @id @default(autoincrement())
+  /// 설명
+  explain   String
+  /// 학년
+  grade     Int
+  /// 차시 순서
+  seq_id    Int
+  /// 생성일
+  createdAt DateTime @default(now())
+  /// 수정일
+  updatedAt DateTime @default(now()) @updatedAt
+  /// 삭제 여부
+  is_del    Boolean  @default(false)
+  krWords   KrWord[]
+  score     Score[]
 
   @@map("steps")
 }
 
 /// 해당 차시의 단어 테이블
-model KrWord{
-  id Int @id @default(autoincrement()) /// pk
-  kr_word String /// 단어
-  pronunciation String /// 발음
-  pronunciation_url String /// 발음 파일 url
-  example String /// 예시
-  step_id Int /// 차시 테이블 fk
-  Step Step @relation(fields:[step_id],references:[id])
-
-  Synonyms Synonym[]
-  Antonyms Antonym[]
-
-  createdAt  DateTime @default(now()) /// 생성일
-  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
-  is_del      Boolean      @default(false) /// 삭제 여부
+model KrWord {
+  /// pk
+  id                Int       @id @default(autoincrement())
+  /// 단어
+  kr_word           String
+  /// 발음
+  pronunciation     String
+  /// 예시
+  example           String
+  /// 차시 테이블 fk
+  step_id           Int
+  /// 생성일
+  createdAt         DateTime  @default(now())
+  /// 수정일
+  updatedAt         DateTime  @default(now()) @updatedAt
+  /// 삭제 여부
+  is_del            Boolean   @default(false)
+  /// 발음 파일 url
+  pronunciation_url String
+  Antonyms          Antonym[]
+  Step              Step      @relation(fields: [step_id], references: [id])
+  Synonyms          Synonym[]
 
   @@index([step_id], map: "kr_words_step_id_fkey")
   @@map("kr_words")
 }
 
 /// 유의어
-model Synonym{
-  id Int @id @default(autoincrement()) /// pk
-  kr_word String /// 유의어 단어
-  pronunciation String /// 발음
-  example String /// 예시
+model Synonym {
+  /// pk
+  id            Int      @id @default(autoincrement())
+  /// 유의어 단어
+  kr_word       String
+  /// 발음
+  pronunciation String
+  /// 예시
+  example       String
+  /// 원래 단어 fk
+  kr_word_id    Int
+  /// 생성일
+  createdAt     DateTime @default(now())
+  /// 수정일
+  updatedAt     DateTime @default(now()) @updatedAt
+  /// 삭제 여부
+  is_del        Boolean  @default(false)
+  KrWord        KrWord   @relation(fields: [kr_word_id], references: [id])
 
-  kr_word_id Int /// 원래 단어 fk
-  KrWord KrWord @relation(fields:[kr_word_id],references:[id])
-
-  createdAt  DateTime @default(now()) /// 생성일
-  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
-  is_del      Boolean      @default(false) /// 삭제 여부
-
+  @@index([kr_word_id], map: "synonyms_kr_word_id_fkey")
   @@map("synonyms")
 }
 
 /// 반의어
-model Antonym{
-  id Int @id @default(autoincrement()) /// pk
-  kr_word String /// 반의어 단어
-  pronunciation String /// 발음
-  example String /// 예시
+model Antonym {
+  /// pk
+  id            Int      @id @default(autoincrement())
+  /// 반의어 단어
+  kr_word       String
+  /// 발음
+  pronunciation String
+  /// 예시
+  example       String
+  /// 원래 단어 fk
+  kr_word_id    Int
+  /// 생성일
+  createdAt     DateTime @default(now())
+  /// 수정일
+  updatedAt     DateTime @default(now()) @updatedAt
+  /// 삭제 여부
+  is_del        Boolean  @default(false)
+  KrWord        KrWord   @relation(fields: [kr_word_id], references: [id])
 
-  kr_word_id Int /// 원래 단어 fk
-  KrWord KrWord @relation(fields:[kr_word_id],references:[id])
-
-  createdAt  DateTime @default(now()) /// 생성일
-  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
-  is_del      Boolean      @default(false) /// 삭제 여부
-
+  @@index([kr_word_id], map: "antonyms_kr_word_id_fkey")
   @@map("antonyms")
+}
+
+model score_result {
+  id          Int      @id @default(autoincrement())
+  score_id    Int
+  question_id Int
+  is_collect  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  is_del      Boolean  @default(false)
+  score       Score    @relation(fields: [score_id], references: [id])
+
+  @@index([score_id], map: "score_result_score_id_fkey")
 }

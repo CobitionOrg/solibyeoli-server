@@ -1,5 +1,7 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { AdminRepository } from './admin.repository';
+import { CreateWordDto } from './dto/createWord.dto';
+import { UpdateWordDto } from './dto/updateWord.dto';
 
 @Injectable()
 export class AdminService {
@@ -54,5 +56,33 @@ export class AdminService {
         // console.log(res);
 
         return { success: true, status: HttpStatus.NO_CONTENT };
+    }
+
+    async createWordData(createWordDto: CreateWordDto) {
+        const step_id = await this.getIdFromStepsTable(
+            createWordDto.grade,
+            createWordDto.seq_id,
+        );
+
+        const res = await this.adminRepository.createWordData(
+            createWordDto,
+            step_id,
+        );
+
+        return { success: true, status: HttpStatus.OK };
+    }
+
+    async updateWordData(updateWordDto: UpdateWordDto) {
+        const step_id = await this.getIdFromStepsTable(
+            updateWordDto.grade,
+            updateWordDto.seq_id,
+        );
+
+        const res = await this.adminRepository.updateWordData(
+            updateWordDto,
+            step_id,
+        );
+
+        return { success: true, status: HttpStatus.OK };
     }
 }
