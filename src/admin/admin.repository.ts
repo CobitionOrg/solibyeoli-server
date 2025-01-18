@@ -75,11 +75,11 @@ export class AdminRepository {
     async deleteWord(id: number) {
         try {
             const res = await this.prisma.krWord.update({
-                data: {
-                    is_del: true,
-                },
                 where: {
                     id: id,
+                },
+                data: {
+                    is_del: true,
                 },
             });
 
@@ -138,15 +138,15 @@ export class AdminRepository {
     async updateWordData(updateWordDto: UpdateWordDto, step_id: number) {
         try {
             const res = await this.prisma.krWord.update({
+                where: {
+                    id: updateWordDto.id,
+                },
                 data: {
                     kr_word: updateWordDto.kr_word,
                     pronunciation: updateWordDto.pronunciation,
                     example: updateWordDto.example,
                     step_id: step_id,
                     pronunciation_url: updateWordDto.pronunciation_url || '',
-                },
-                where: {
-                    id: updateWordDto.id,
                 },
             });
 
