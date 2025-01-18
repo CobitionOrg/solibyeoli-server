@@ -36,7 +36,6 @@ export class WordController {
     async getStepsByGrade(@Query() getStepsByGrade: GetStepsByGradeDto) {
         this.logger.log('학년 별 차수 조회');
 
-        console.log(getStepsByGrade);
         const cacheKey = `/getSteps/${getStepsByGrade.grade}`;
         const cacheValue = this.cache.get(cacheKey);
 
@@ -53,7 +52,6 @@ export class WordController {
     async getWordsByStep(@Param('stepId') stepId: number) {
         this.logger.log('차수 별 단어 조회');
 
-        console.log(stepId);
         const cacheKey = `/getWords/${stepId}`;
         const cacheValue = this.cache.get(cacheKey);
 
