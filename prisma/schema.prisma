@@ -38,46 +38,50 @@ model User {
 
 /// 사용자 점수 테이블
 model Score {
-  /// pk
-  id           Int            @id @default(autoincrement())
-  /// 점수
-  score        Int
-  /// 유저 테이블 fk
-  user_id      Int
-  /// 생성일
-  createdAt    DateTime       @default(now())
-  /// 수정일
-  updatedAt    DateTime       @default(now()) @updatedAt
-  /// 삭제 여부
-  is_del       Boolean        @default(false)
-  step_id      Int
-  steps        Step           @relation(fields: [step_id], references: [id])
-  User         User           @relation(fields: [user_id], references: [id])
-  score_result score_result[]
+  id  Int @id @default(autoincrement())  /// pk
+  score Int /// 점수
+  user_id Int /// 유저 테이블 fk
+  User User @relation(fields:[user_id], references:[id])
+  step_id Int /// 차수 테이블 fk
+  Step Step @relation(fields:[step_id],references:[id])
 
-  @@index([step_id], map: "score_step_id_fkey")
-  @@index([user_id], map: "score_user_id_fkey")
+  ScoreResults ScoreResult[]
+  
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
+
   @@map("score")
+}
+
+model ScoreResult {
+  id  Int @id @default(autoincrement())  /// pk
+  score_id Int /// 점수 테이블 fk
+  Score Score @relation(fields:[score_id], references:[id])
+
+  question_id Int /// 몇 번 단어의 문제인지
+  is_collect Boolean @default(false) /// 정답 여부
+
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
+
+  @@map("score_result")
 }
 
 /// 차시(공부 차시) 테이블
 model Step {
-  /// pk
-  id        Int      @id @default(autoincrement())
-  /// 설명
-  explain   String
-  /// 학년
-  grade     Int
-  /// 차시 순서
-  seq_id    Int
-  /// 생성일
-  createdAt DateTime @default(now())
-  /// 수정일
-  updatedAt DateTime @default(now()) @updatedAt
-  /// 삭제 여부
-  is_del    Boolean  @default(false)
-  krWords   KrWord[]
-  score     Score[]
+  id Int @id @default(autoincrement()) /// pk
+  explain String /// 설명
+  grade Int /// 학년
+  seq_id Int /// 차시 순서
+
+  krWords KrWord[]
+  Scores Score[]
+
+  createdAt  DateTime @default(now()) /// 생성일
+  updatedAt  DateTime @default(now()) @updatedAt /// 수정일
+  is_del      Boolean      @default(false) /// 삭제 여부
 
   @@map("steps")
 }
