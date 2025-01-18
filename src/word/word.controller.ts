@@ -18,7 +18,7 @@ import { GetStepsByGradeDto } from './dto/getStepsByGrade.dto';
 export class WordController {
     cache: NodeCache;
     constructor(private readonly wordSevice: WordService) {
-        this.cache = new NodeCache();
+        this.cache = new NodeCache({ stdTTL: 28800 });
     }
 
     private readonly logger = new Logger(WordController.name);
