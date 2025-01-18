@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { winstonLogger } from './middleware/logger/winston.log';
+import * as bodyParser from 'body-parser';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule, {
@@ -30,6 +31,11 @@ async function bootstrap() {
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api', app, document);
+
+    // 본문 크기 제한 설정
+    // JSON 및 URL-encoded 본문 크기 제한 늘리기
+    app.use(bodyParser.json({ limit: '50mb' }));
+    app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
     await app.listen(3000);
 }
