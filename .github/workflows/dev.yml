@@ -1,0 +1,43 @@
+on:
+    push:
+        branches: ['main']
+
+jobs:
+    # CI Pipeline
+    ci:
+        name: Docker Image CI
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Login Dockerhub
+              env:
+                  DOCKER_USERNAME: ${{secrets.DOCKERHUB_USERNAME}}
+                  DOCKER_PASSWORD: ${{secrets.DOCKERHUB_PASSWORD}}
+              run: echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+
+            - name: Build the Docker image
+              run: docker build -t qudqud97/solibyeli:latest .
+
+            - name: Push to Dockerhub
+              run: docker push qudqud97/solibyeli:latest
+
+    # CD Pipeline
+    cd:
+        name: CD Pipeline
+        needs: ci
+        runs-on: self-hosted
+        steps:
+            - name: Pull Docker image
+              run: sudo docker pull qudqud97/solibyeli:latest
+
+            - name: Delete Old docker container
+              run: sudo docker rm -f solibyeli-container || true
+
+            - name: Run Docker Container
+              run: sudo docker run -d -p 3000:3000 --name solibyeli-container \-v /host/logs:/app/dist/logs qudqud97/solibyeli
+
+            - name: Set Permissions for Log Directory in Container
+              run: |
+                  sudo docker exec -u root solibyeli-container mkdir -p /app/dist/logs
+                  sudo docker exec -u root solibyeli-container chown -R appuser:appgroup /app/dist/logs
