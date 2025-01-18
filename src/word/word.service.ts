@@ -2,17 +2,39 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { WordRepository } from './word.repository';
 import { CreateWordDto } from './dto/createWord.dto';
 import { GetStepsByGradeDto } from './dto/getStepsByGrade.dto';
+import { PrismaService } from 'src/prisma.service';
 
 @Injectable()
 export class WordService {
-    constructor(private readonly wordRepository: WordRepository) {}
+    constructor(
+        private readonly wordRepository: WordRepository,
+        private readonly prisma: PrismaService,
+    ) {}
 
     private readonly logger = new Logger(WordService.name);
 
     async createWords(createWordDtos: Array<CreateWordDto>) {
-        for (const createWordDto of createWordDtos) {
-            await this.wordRepository.createWord(createWordDto);
-        }
+        const createWords = await this.prisma.$transaction(
+            async (tx) => {
+                const deleteWords =
+                    await this.wordRepository.deleteAllWords(tx);
+
+                if (!deleteWords)
+                    throw new HttpException(
+                        {
+                            success: false,
+                            status: HttpStatus.INTERNAL_SERVER_ERROR,
+                            msg: '내부 서버 에러',
+                        },
+                        HttpStatus.INTERNAL_SERVER_ERROR,
+                    );
+
+                for (const createWordDto of createWordDtos) {
+                    await this.wordRepository.createWord(tx, createWordDto);
+                }
+            },
+            { timeout: 100000 },
+        );
 
         return { success: true, status: HttpStatus.CREATED };
     }
@@ -51,5 +73,5 @@ export class WordService {
         const words = await this.wordRepository.getWordsByStep(stepId);
 
         return { success: true, status: HttpStatus.OK, data: words };
-      }
+    }
 }
