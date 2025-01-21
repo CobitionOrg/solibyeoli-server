@@ -2,13 +2,12 @@ import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { AdminRepository } from './admin.repository';
 import { CreateWordDto } from './dto/createWord.dto';
 import { UpdateWordDto } from './dto/updateWord.dto';
-import { S3Service } from 'src/s3/s3.service';
+import { generateUploadURL } from 'src/utils/s3.util';
 
 @Injectable()
 export class AdminService {
     constructor(
         private readonly adminRepository: AdminRepository,
-        private readonly s3Service: S3Service,
     ) {}
 
     private readonly logger = new Logger(AdminService.name);
@@ -109,7 +108,7 @@ export class AdminService {
         if (!fileName) {
             throw new Error('File name is required');
         }
-        const url = await this.s3Service.getPresignedUrl(fileName);
+        const url = await generateUploadURL();
 
         return { success: true, url: url, status: HttpStatus.OK };
     }

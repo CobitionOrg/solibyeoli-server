@@ -9,7 +9,6 @@ import { WordModule } from './word/word.module';
 import { UsersModule } from './users/users.module';
 import { ScoreModule } from './score/score.module';
 import { AdminModule } from './admin/admin.module';
-import { S3Module } from './s3/s3.module';
 
 @Module({
   imports: [
@@ -19,7 +18,6 @@ import { S3Module } from './s3/s3.module';
     WordModule,
     UsersModule,
     AdminModule,
-    S3Module,
   ],
   controllers: [AppController],
   providers: [
