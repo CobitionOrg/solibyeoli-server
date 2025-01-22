@@ -36,8 +36,10 @@ export class ScoreService {
         const userId = token.sub;
 
         const createScore =
-            createResultDto.scoreResults.filter((i) => i.is_collect === true)
-                .length / createResultDto.scoreResults.length;
+            (createResultDto.scoreResults.filter((i) => i.is_collect === true)
+                .length /
+                createResultDto.scoreResults.length) *
+            100;
 
         const createScoreResult = createResultDto.scoreResults;
 
@@ -60,5 +62,30 @@ export class ScoreService {
         });
 
         return { success: true, status: HttpStatus.CREATED, data: createData };
+    }
+
+    /**
+     * 점수 결과 가져오기
+     * @param header
+     * @returns
+     */
+    async getScoreList(header) {
+        const token = await this.jwtService.decode(header);
+
+        if (!token)
+            throw new HttpException(
+                {
+                    success: false,
+                    status: HttpStatus.UNAUTHORIZED,
+                    msg: '토큰이 유효하지 않습니다',
+                },
+                HttpStatus.UNAUTHORIZED,
+            );
+
+        const userId = token.sub;
+
+        const scoreList = await this.scoreRepository.getScoreList(userId);
+
+        return { success: true, status: HttpStatus.OK, data: scoreList };
     }
 }

@@ -83,6 +83,12 @@ export class ScoreRepository {
         }
     }
 
+    /**
+     * 퀴즈 결과 생성
+     * @param tx
+     * @param createScoreResult
+     * @param scoreId
+     */
     async createScoreResultBulk(
         tx: Prisma.TransactionClient,
         createScoreResult: Array<CreateScoreResultDto>,
@@ -115,6 +121,50 @@ export class ScoreRepository {
                         status: HttpStatus.INTERNAL_SERVER_ERROR,
                     };
                 });
+        } catch (err) {
+            this.logger.error(err);
+            throw new HttpException(
+                {
+                    success: false,
+                    status: HttpStatus.INTERNAL_SERVER_ERROR,
+                    msg: '내부 서버 에러',
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
+    }
+
+    /**
+     * 점수 리스트 출력
+     * @param userId
+     * @returns
+     */
+    async getScoreList(userId: number) {
+        try {
+            const scoreList = await this.prisma.score.findMany({
+                where: { user_id: userId, is_del: false },
+                select: {
+                    id: true,
+                    score: true,
+                    createdAt: true,
+                    Step: {
+                        select: {
+                            id: true,
+                            grade: true,
+                            seq_id: true,
+                        },
+                    },
+                    ScoreResults: {
+                        select: {
+                            id: true,
+                            question_id: true,
+                            is_collect: true,
+                        },
+                    },
+                },
+            });
+
+            return scoreList;
         } catch (err) {
             this.logger.error(err);
             throw new HttpException(
