@@ -69,7 +69,7 @@ export class ScoreService {
      * @param header
      * @returns
      */
-    async getScoreList(header) {
+    async getScoreList(header: string) {
         const token = await this.jwtService.decode(header);
 
         if (!token)
@@ -87,5 +87,35 @@ export class ScoreService {
         const scoreList = await this.scoreRepository.getScoreList(userId);
 
         return { success: true, status: HttpStatus.OK, data: scoreList };
+    }
+
+    async deleteAllScore(header: string) {
+        const token = await this.jwtService.decode(header);
+
+        if (!token)
+            throw new HttpException(
+                {
+                    success: false,
+                    status: HttpStatus.UNAUTHORIZED,
+                    msg: '토큰이 유효하지 않습니다',
+                },
+                HttpStatus.UNAUTHORIZED,
+            );
+
+        const userId = token.sub;
+        const res = await this.scoreRepository.deleteAllScore(userId);
+
+        if (res)
+            return {
+                success: true,
+                status: HttpStatus.NO_CONTENT,
+                data: '초기화 되었습니다.',
+            };
+        else
+            return {
+                success: false,
+                status: HttpStatus.INTERNAL_SERVER_ERROR,
+                data: '내부 서버 에러',
+            };
     }
 }

@@ -7,6 +7,7 @@ import {
     UseFilters,
     UseGuards,
     Get,
+    Delete,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ScoreService } from './score.service';
@@ -42,6 +43,14 @@ export class ScoreController {
     @Get('/list')
     async getScoreList(@Headers() header) {
         const res = await this.scoreService.getScoreList(getToken(header));
+
+        return res;
+    }
+
+    @ApiOperation({ summary: '학습 결과 초기화' })
+    @Delete('/')
+    async deleteAllScore(@Headers() header) {
+        const res = await this.scoreService.deleteAllScore(getToken(header));
 
         return res;
     }

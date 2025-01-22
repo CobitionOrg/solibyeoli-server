@@ -177,4 +177,25 @@ export class ScoreRepository {
             );
         }
     }
+
+    async deleteAllScore(userId) {
+        try {
+            await this.prisma.score.updateMany({
+                where: { user_id: userId },
+                data: { is_del: true },
+            });
+
+            return true;
+        } catch (err) {
+            this.logger.error(err);
+            throw new HttpException(
+                {
+                    success: false,
+                    status: HttpStatus.INTERNAL_SERVER_ERROR,
+                    msg: '내부 서버 에러',
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
+    }
 }
