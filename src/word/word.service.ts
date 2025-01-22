@@ -74,4 +74,22 @@ export class WordService {
 
         return { success: true, status: HttpStatus.OK, data: words };
     }
+
+    /**
+     * 단어 검색
+     * @param keyWord
+     * @returns
+     */
+    async searchWord(keyWord: string) {
+        if (!keyWord)
+            //throw error가 아닌 논리적 에러 처리를 위해
+            return {
+                success: false,
+                status: HttpStatus.BAD_REQUEST,
+                data: '검색어를 다시 입력해주세요',
+            };
+        const words = await this.wordRepository.searchWord(keyWord);
+
+        return { success: true, status: HttpStatus.OK, data: words };
+    }
 }
