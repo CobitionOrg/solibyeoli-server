@@ -35,8 +35,8 @@ export async function generateUploadURL() {
 
   const uploadURL = await s3.getSignedUrlPromise('putObject', params)
 
-  console.log('---------------------');
-  console.log(uploadURL);
+  // console.log('---------------------');
+  // console.log(uploadURL);
   return { uploadURL, imageName };
 }
 
@@ -57,7 +57,7 @@ export async function deleteUploadObject(name: string){
     Key: name
   },async (err:any, data:any) => {
     if(err){
-      console.log(err);
+      console.error(err);
       return {success:false};
     }else{
       return {success:true};
