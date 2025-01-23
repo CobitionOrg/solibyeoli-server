@@ -6,9 +6,7 @@ import { generateUploadURL } from 'src/utils/s3.util';
 
 @Injectable()
 export class AdminService {
-    constructor(
-        private readonly adminRepository: AdminRepository,
-    ) {}
+    constructor(private readonly adminRepository: AdminRepository) {}
 
     private readonly logger = new Logger(AdminService.name);
 
@@ -72,6 +70,11 @@ export class AdminService {
             createWordDto.seq_id,
         );
 
+        if (createWordDto.pronunciation_url) {
+            createWordDto.pronunciation_url =
+                createWordDto.pronunciation_url.split('?')[0];
+        }
+
         const res = await this.adminRepository.createWordData(
             createWordDto,
             step_id,
@@ -90,6 +93,11 @@ export class AdminService {
             updateWordDto.grade,
             updateWordDto.seq_id,
         );
+
+        if (updateWordDto.pronunciation_url) {
+            updateWordDto.pronunciation_url =
+                updateWordDto.pronunciation_url.split('?')[0];
+        }
 
         const res = await this.adminRepository.updateWordData(
             updateWordDto,
