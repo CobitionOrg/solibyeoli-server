@@ -63,4 +63,19 @@ export class WordController {
 
         return res;
     }
+
+    @ApiOperation({ summary: '단어 검색' })
+    @Get('/search')
+    async searchWord(@Query('searchKeyword') searchKeyword: string) {
+        this.logger.log('단어 검색');
+
+        const cacheKey = `/searchWord/${searchKeyword}`;
+        const cacheValue = this.cache.get(cacheKey);
+
+        if (cacheValue) return cacheValue;
+
+        const res = await this.wordSevice.searchWord(searchKeyword);
+
+        return res;
+    }
 }

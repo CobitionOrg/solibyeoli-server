@@ -103,4 +103,42 @@ export class WordRepository {
             );
         }
     }
+
+    /**
+     * 단어 검색
+     * @param keyWord
+     * @returns
+     */
+    async searchWord(keyWord: string) {
+        try {
+            const words = await this.prisma.krWord.findMany({
+                where: {
+                    kr_word: {
+                        contains: keyWord,
+                    },
+                    is_del: false,
+                },
+                select: {
+                    id: true,
+                    kr_word: true,
+                    example: true,
+                    Step: {
+                        select: { id: true, grade: true, seq_id: true },
+                    },
+                },
+            });
+
+            return words;
+        } catch (err) {
+            this.logger.error(err);
+            throw new HttpException(
+                {
+                    success: false,
+                    status: HttpStatus.INTERNAL_SERVER_ERROR,
+                    msg: '내부 서버 에러',
+                },
+                HttpStatus.INTERNAL_SERVER_ERROR,
+            );
+        }
+    }
 }
