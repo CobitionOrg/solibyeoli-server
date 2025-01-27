@@ -8,6 +8,7 @@ import {
     UseGuards,
     Get,
     Delete,
+    Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ScoreService } from './score.service';
@@ -15,6 +16,7 @@ import { CreateResultDto } from './dto/createResult.dto';
 import { getToken } from 'src/utils/token';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { HttpExceptionFilter } from 'src/filter/httpExceptionFilter';
+import { PageDto } from './dto/page.dto';
 
 @ApiTags('score')
 @UseFilters(new HttpExceptionFilter())
@@ -41,8 +43,11 @@ export class ScoreController {
 
     @ApiOperation({ summary: '퀴즈 결과 리스트' })
     @Get('/list')
-    async getScoreList(@Headers() header) {
-        const res = await this.scoreService.getScoreList(getToken(header));
+    async getScoreList(@Headers() header, @Query() pageDto: PageDto) {
+        const res = await this.scoreService.getScoreList(
+            getToken(header),
+            pageDto,
+        );
 
         return res;
     }

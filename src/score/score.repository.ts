@@ -139,9 +139,11 @@ export class ScoreRepository {
      * @param userId
      * @returns
      */
-    async getScoreList(userId: number) {
+    async getScoreList(userId: number, skip: number, take: number) {
         try {
             const scoreList = await this.prisma.score.findMany({
+                skip,
+                take,
                 where: { user_id: userId, is_del: false },
                 select: {
                     id: true,
