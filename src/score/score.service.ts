@@ -71,19 +71,19 @@ export class ScoreService {
      * @returns
      */
     async getScoreList(header: string, pageDto: PageDto) {
-        // const token = await this.jwtService.decode(header);
+        const token = await this.jwtService.decode(header);
 
-        // if (!token)
-        //     throw new HttpException(
-        //         {
-        //             success: false,
-        //             status: HttpStatus.UNAUTHORIZED,
-        //             msg: '토큰이 유효하지 않습니다',
-        //         },
-        //         HttpStatus.UNAUTHORIZED,
-        //     );
+        if (!token)
+            throw new HttpException(
+                {
+                    success: false,
+                    status: HttpStatus.UNAUTHORIZED,
+                    msg: '토큰이 유효하지 않습니다',
+                },
+                HttpStatus.UNAUTHORIZED,
+            );
 
-        const userId = 8;
+        const userId = token.sub;
         const skip = (pageDto.page - 1) * pageDto.limit; // 건너뛸 항목 수
         const take = pageDto.limit; // 가져올 항목 수
         const scoreList = await this.scoreRepository.getScoreList(
