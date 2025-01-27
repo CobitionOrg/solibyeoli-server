@@ -80,7 +80,7 @@ export class AdminService {
             step_id,
         );
 
-        return { success: true, status: HttpStatus.OK, data: res };
+        return { success: true, status: HttpStatus.CREATED, data: res };
     }
 
     /**
