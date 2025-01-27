@@ -3,6 +3,7 @@ import { ScoreRepository } from './score.repository';
 import { CreateResultDto } from './dto/createResult.dto';
 import { PrismaService } from 'src/prisma.service';
 import { JwtService } from '@nestjs/jwt';
+import { PageDto } from './dto/page.dto';
 
 @Injectable()
 export class ScoreService {
@@ -69,24 +70,36 @@ export class ScoreService {
      * @param header
      * @returns
      */
-    async getScoreList(header: string) {
-        const token = await this.jwtService.decode(header);
+    async getScoreList(header: string, pageDto: PageDto) {
+        // const token = await this.jwtService.decode(header);
 
-        if (!token)
-            throw new HttpException(
-                {
-                    success: false,
-                    status: HttpStatus.UNAUTHORIZED,
-                    msg: '토큰이 유효하지 않습니다',
-                },
-                HttpStatus.UNAUTHORIZED,
-            );
+        // if (!token)
+        //     throw new HttpException(
+        //         {
+        //             success: false,
+        //             status: HttpStatus.UNAUTHORIZED,
+        //             msg: '토큰이 유효하지 않습니다',
+        //         },
+        //         HttpStatus.UNAUTHORIZED,
+        //     );
 
-        const userId = token.sub;
+        const userId = 8;
+        const skip = (pageDto.page - 1) * pageDto.limit; // 건너뛸 항목 수
+        const take = pageDto.limit; // 가져올 항목 수
+        const scoreList = await this.scoreRepository.getScoreList(
+            userId,
+            skip,
+            take,
+        );
 
-        const scoreList = await this.scoreRepository.getScoreList(userId);
+        const data = scoreList.sort((a, b) => {
+            if (a.Step.grade !== b.Step.grade) {
+                return a.Step.grade - b.Step.grade;
+            }
+            return a.Step.seq_id - b.Step.seq_id;
+        });
 
-        return { success: true, status: HttpStatus.OK, data: scoreList };
+        return { success: true, status: HttpStatus.OK, data: data };
     }
 
     async deleteAllScore(header: string) {

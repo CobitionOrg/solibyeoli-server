@@ -11,23 +11,24 @@ import { ScoreModule } from './score/score.module';
 import { AdminModule } from './admin/admin.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    WordModule,
-    UsersModule,
-    AdminModule,
-  ],
-  controllers: [AppController],
-  providers: [
-    AppService,
-    Logger,
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
-  ],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+        }),
+        WordModule,
+        UsersModule,
+        AdminModule,
+        ScoreModule,
+    ],
+    controllers: [AppController],
+    providers: [
+        AppService,
+        Logger,
+        {
+            provide: APP_FILTER,
+            useClass: HttpExceptionFilter,
+        },
+    ],
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer) {
